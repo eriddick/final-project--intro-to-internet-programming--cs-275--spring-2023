@@ -16,7 +16,7 @@ async function allBrowsers () {
     browserChoice = [
         `brave browser`,
         `google chrome`,
-        `microsoft edge`, // Note: In Windows, this might need to be microsoft-edge
+        `microsoft edge`,
         `firefox`,
         `opera`,
         `safari`,
@@ -35,7 +35,7 @@ let compileCSSForDev = () => {
             outputStyle: `expanded`,
             precision: 10
         }).on(`error`, sass.logError))
-        .pipe(dest(`temp/styles`));
+        .pipe(dest(`temp/css`));
 };
 
 let lintJS = () => {
@@ -47,7 +47,7 @@ let lintJS = () => {
 let transpileJSForDev = () => {
     return src(`dev/js/*.js`)
         .pipe(babel())
-        .pipe(dest(`temp/scripts`));
+        .pipe(dest(`temp/js`));
 };
 
 let compressHTML = () => {
@@ -62,26 +62,26 @@ let compileCSSForProd = () => {
             outputStyle: `compressed`,
             precision: 10
         }).on(`error`, sass.logError))
-        .pipe(dest(`prod/styles`));
+        .pipe(dest(`prod/css`));
 };
 
 let transpileJSForProd = () => {
     return src(`dev/js/*.js`)
         .pipe(babel())
         .pipe(jsCompressor())
-        .pipe(dest(`prod/scripts`));
+        .pipe(dest(`prod/js`));
 };
 
 let copyUnprocessedAssetsForProd = () => {
     return src([
-        `*.*`,       // Source all files,
-        `**`,        // and all folders,
-        `!html/`,    // but not the HTML folder
-        `!html/*.*`, // or any files in it
-        `!html/**`,  // or any sub folders;
-        `!img/`,     // ignore images;
-        `!**/*.js`,  // ignore JS;
-        `!styles/**` // and, ignore Sass/CSS.
+        `*.*`,
+        `**`,
+        `!html/`,
+        `!html/*.*`,
+        `!html/**`,
+        `!img/`,
+        `!**/*.js`,
+        `!styles/**`
     ], {dot: true})
         .pipe(dest(`prod`));
 };
@@ -173,10 +173,6 @@ exports.clean = clean;
 exports.listTasks = listTasks;
 exports.lintCSS = lintCSS;
 exports.default = series(
-    validateHTML,
-    compileCSSForDev,
-    lintJS,
-    transpileJSForDev,
     serve
 );
 exports.serve = series(
@@ -184,7 +180,6 @@ exports.serve = series(
     compileCSSForDev,
     lintJS,
     transpileJSForDev,
-    serve
 );
 exports.build = series(
     compressHTML,
