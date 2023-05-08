@@ -1,0 +1,21 @@
+h1 {
+  position: relative;
+  text-size-adjust: 30px;
+  padding-top: 10px;
+  left: 500px;
+}
+
+h2 {
+  position: inherit;
+  margin-left: 400px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+table {
+  position: inherit;
+  margin-left: 250px;
+  height: 500px;
+  width: 500px;
+  text-size-adjust: 50px;
+}
